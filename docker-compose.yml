@@ -1,0 +1,21 @@
+version: '3'
+services:
+  ezan-scheduler:
+    build: .
+    container_name: ezan-scheduler
+    network_mode: host
+  home-file-server:
+    container_name: home-file-server
+    ports:
+      - "8080:80"
+    volumes:
+      - ./file-server:/usr/local/apache2/htdocs/
+    image: httpd:2.4
+#  home-assistant:
+#    container_name: my-home-assistant
+#    ports:
+#      - "8123:8123"
+#    volumes:
+#      - ./home-assistant-config:/config
+#      - /etc/localtime:/etc/localtime:ro
+#    image: homeassistant/home-assistant
