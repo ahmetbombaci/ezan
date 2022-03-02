@@ -1,0 +1,10 @@
+automation:
+  - alias: run_template
+    trigger:
+      platform: event
+      event_type: test_shell
+    action:
+      service: shell_command.test
+
+shell_command:
+  test: touch /config/ahmettouch
