@@ -1,2 +1,2 @@
-script/homeAssistant*
-home-assistant/*
+v1-homeassistant-docker/script/homeAssistant*
+v1-homeassistant-docker/home-assistant/*
