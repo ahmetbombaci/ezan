@@ -4,13 +4,14 @@
 # sudo timedatectl set-timezone America/Chicago
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+# shellcheck source=ezan.config
 source "$SCRIPT_DIR"/ezan.config
 
 function debug() {
-    if [ $debugging == "true" ];
+    if [ "${debugging:?}" == "true" ];
     then
         echo "[DEBUG]: $1"
-        echo "[DEBUG]: $1" >> ~/ezan.log
+		echo "[DEBUG]: $(date +%y%m%d%H%M): $1" >> ~/ezan.log
     fi
 }
 
@@ -24,7 +25,7 @@ function convertPrayTime() {
 
 timestamp=$(date +%s)
 
-url="http://api.aladhan.com/v1/timings/$timestamp?latitude=$latitude&longitude=$longitude&method=$prayer_method"
+url="http://api.aladhan.com/v1/timings/$timestamp?latitude=${latitude:?}&longitude=${longitude:?}&method=${prayer_method:?}"
 debug "ezan end point: $url"
 
 ezanJson=$(curl --silent "$url")
@@ -40,35 +41,35 @@ function callEzan() {
     debug "$2:$1"
     convertPrayTime "$1"
 
-    debug "$prayMinute $prayHour * * * python3 ${SCRIPT_DIR}/ezan.py --cast \"$cast_name\" #ezanruncronjob"
+    debug "$prayMinute $prayHour * * * python3 ${SCRIPT_DIR}/ezan.py --cast \"${cast_name:?}\" #ezanruncronjob"
     crontab -l | { cat; echo "$prayMinute $prayHour * * * python3 ${SCRIPT_DIR}/ezan.py --cast \"$cast_name\" #ezanruncronjob"; } | crontab -
 }
 
-if [ $call_fajr == "true" ];
+if [ "${call_fajr:?}" == "true" ];
 then
 		fajr=$(echo "$ezanJson" | jq '.data.timings.Fajr')
 		callEzan "$fajr" "fajr"
 fi
 
-if [ $call_dhuhr == "true" ];
+if [ "${call_dhuhr:?}" == "true" ];
 then
 		dhuhr=$(echo "$ezanJson" | jq '.data.timings.Dhuhr')
 		callEzan "$dhuhr" "dhuhr"
 fi
 
-if [ $call_asr == "true" ];
+if [ "${call_asr:?}" == "true" ];
 then
 		asr=$(echo "$ezanJson" | jq '.data.timings.Asr')
 		callEzan "$asr" "asr"
 fi
 
-if [ $call_magrib == "true" ];
+if [ "${call_magrib:?}" == "true" ];
 then
 		magrib=$(echo "$ezanJson" | jq '.data.timings.Maghrib')
 		callEzan "$magrib" "magrib"
 fi
 
-if [ $call_isha == "true" ];
+if [ "${call_isha:?}" == "true" ];
 then
 		isha=$(echo "$ezanJson" | jq '.data.timings.Isha')
 		callEzan "$isha" "isha"
