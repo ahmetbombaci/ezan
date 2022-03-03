@@ -52,17 +52,17 @@ pi@raspberrypi:~ $ sudo timedatectl set-timezone America/Chicago
 * Set new daily cronjob to refresh prayer times daily:
 	* Manually:
 		* `crontab -e`
-		* Add new line: `0 1 * * * /home/pi/ezan/ezan/sh`
-		* Fix path of `ezan.sh`
+		* Add new line: `0 1 * * * /home/pi/ezan/ezan/sh > /home/pi/ezan/ezan.log 2>&1`
+		* Fix path of `ezan.sh` and `ezan.log`
 	* Or, execute the following in `ezan.sh` directory:
-		* `crontab -l | { cat; echo "0 1 * * * $(pwd)/ezan.sh"; } | crontab -`
+		* `crontab -l | { cat; echo "0 1 * * * $(pwd)/ezan.sh > $(pwd)/ezan.log 2>&1"; } | crontab -`
 
 You should be all set!
 
 
 ## Troubleshooting
 
-By default, debug mode is enabled so logs can be found at `~/ezan.log`.
+By default, debug mode is enabled so logs can be found at `ezan.log`.
 Debug mode can be turned off via `ezan.config` with `debugging=false`
 
 This script and chromecast device must be in the same local area network (LAN).

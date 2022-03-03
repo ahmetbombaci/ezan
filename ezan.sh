@@ -10,8 +10,7 @@ source "$SCRIPT_DIR"/ezan.config
 function debug() {
     if [ "${debugging:?}" == "true" ];
     then
-        echo "[DEBUG]: $1"
-		echo "[DEBUG]: $(date +%y%m%d%H%M): $1" >> ~/ezan.log
+		echo "[DEBUG]: $(date +%y%m%d%H%M): $1"
     fi
 }
 
