@@ -10,7 +10,7 @@ function debug() {
     if [ $debugging == "true" ];
     then
         echo "[DEBUG]: $1"
-        echo "[DEBUG]: $1" >> ezan.log
+        echo "[DEBUG]: $1" >> /var/log/ezan.log
     fi
 }
 
