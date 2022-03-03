@@ -12,7 +12,7 @@ to customize if you want to adapt.
 The following applications/packages are needed.
 
 ```
-sudo apt install jq python3-pip
+sudo apt install curl jq python3-pip
 ```
 
 ## Home Assistant pychromecast lib
@@ -45,7 +45,9 @@ pi@raspberrypi:~ $ sudo timedatectl set-timezone America/Chicago
 * Update `ezan.config`:
 	* Set `latitude` and `longitude` based on where you live.
 	* Set `cast_name` based on friendly name of chromecast device. You can use `python3 device-list.py`.
-    * Set `prayer_method`. See options at [aladhan api link](http://api.aladhan.com/v1/methods).
+    * Set `prayer_method`. 
+		* See options at [aladhan api link](http://api.aladhan.com/v1/methods).
+		* `curl http://api.aladhan.com/v1/methods | jq`
 * Make sure that `ezan.sh` is executable: `chmod +x ezan.sh`.
 * Set new daily cronjob to refresh prayer times daily:
 	* Manually:
@@ -60,7 +62,7 @@ You should be all set!
 
 ## Troubleshooting
 
-By default, debug mode is enabled so logs can be found at `/var/log/ezan.log`.
+By default, debug mode is enabled so logs can be found at `~/ezan.log`.
 Debug mode can be turned off via `ezan.config` with `debugging=false`
 
 This script and chromecast device must be in the same local area network (LAN).

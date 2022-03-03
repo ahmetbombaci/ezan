@@ -10,7 +10,7 @@ function debug() {
     if [ $debugging == "true" ];
     then
         echo "[DEBUG]: $1"
-        echo "[DEBUG]: $1" >> /var/log/ezan.log
+        echo "[DEBUG]: $1" >> ~/ezan.log
     fi
 }
 
@@ -35,7 +35,7 @@ debug "ezan response: $ezanJson"
 # Clean up previous jobs
 crontab -l | grep -v ezanruncronjob | { cat; } | crontab -
 
-#schedule a job at pray time so home assistant event will be triggered
+#schedule new job at pray time
 function callEzan() {
     debug "$2:$1"
     convertPrayTime "$1"
