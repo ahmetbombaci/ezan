@@ -3,8 +3,8 @@
 # https://linuxize.com/post/how-to-set-or-change-timezone-on-debian-10/
 # sudo timedatectl set-timezone America/Chicago
 
-source ezan.config
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+source "$SCRIPT_DIR"/ezan.config
 
 function debug() {
     if [ $debugging == "true" ];
