@@ -44,10 +44,12 @@ pi@raspberrypi:~ $ sudo timedatectl set-timezone America/Chicago
 * Clone this repo. 
 * Create `~/ezan.config` to override definitions at `default.config`:
 	* Set `latitude` and `longitude` based on where you live.
-	* Set `cast_name` based on friendly name of chromecast device. You can use `python3 device-list.py`.
     * Set `prayer_method`. 
 		* See options at [aladhan api link](http://api.aladhan.com/v1/methods).
 		* `curl http://api.aladhan.com/v1/methods | jq`
+	* Set `action`. This can be either `cast` or `command`.
+	* If the action is cast, set `cast_name` based on friendly name of chromecast device. You can use `python3 device-list.py`.
+	* If the action is command set `command_script` so it will be executed during pray time.
 * Make sure that `ezan.sh` is executable: `chmod +x ezan.sh`.
 * Set new daily cronjob to refresh prayer times daily:
 	* Manually:

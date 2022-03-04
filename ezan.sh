@@ -46,8 +46,14 @@ function callEzan() {
     debug "$2:$1"
     convertPrayTime "$1"
 
-    debug "$prayMinute $prayHour * * * python3 ${SCRIPT_DIR}/ezan.py --cast \"${cast_name:?}\" #ezanruncronjob"
-    crontab -l | { cat; echo "$prayMinute $prayHour * * * python3 ${SCRIPT_DIR}/ezan.py --cast \"$cast_name\" #ezanruncronjob"; } | crontab -
+	if [ "${action:?}" == "cast" ]; then
+			script_exec="python3 ${SCRIPT_DIR}/ezan.py --cast \"${cast_name:?}\" #ezanruncronjob"
+	elif [ "${action:?}" == "command" ]; then
+			script_exec="${command_script:?} #ezanruncronjob" 
+	fi
+	debug "$script_exec"
+	crontab -l | { cat; echo "$prayMinute $prayHour * * * $script_exec"; } | crontab -
+
 }
 
 if [ "${call_fajr:?}" == "true" ];
