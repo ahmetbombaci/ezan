@@ -42,7 +42,7 @@ pi@raspberrypi:~ $ sudo timedatectl set-timezone America/Chicago
 ## Clone This Repo
 
 * Clone this repo. 
-* Update `ezan.config`:
+* Create `~/ezan.config` to override definitions at `default.config`:
 	* Set `latitude` and `longitude` based on where you live.
 	* Set `cast_name` based on friendly name of chromecast device. You can use `python3 device-list.py`.
     * Set `prayer_method`. 
