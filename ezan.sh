@@ -4,12 +4,12 @@
 # sudo timedatectl set-timezone America/Chicago
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-# shellcheck source=default.config
+# shellcheck source=/dev/null
 source "$SCRIPT_DIR"/default.config
 
 if [ -e  ~/ezan.config ];
 then
-	# shellcheck source=/ezan.config
+	# shellcheck source=/dev/null
 	source ~/ezan.config
 fi
 
