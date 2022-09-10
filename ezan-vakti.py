@@ -14,7 +14,7 @@ import requests
 @click.option('--maghrib', is_flag=True, help='display maghrib pray time.')
 @click.option('--isha', is_flag=True, help='display isha pray time.')
 @click.option('--all', is_flag=True, help='display all pray times.')
-@click.option('--current', is_flag=True, help='display current pray time.')
+@click.option('--current', is_flag=True, help='display current pray time. default option if no option is provided.')
 def ezan_vakti(fajr, dhuhr, asr, maghrib, isha, all, current):
     """Display pray times."""
 
@@ -50,7 +50,7 @@ def ezan_vakti(fajr, dhuhr, asr, maghrib, isha, all, current):
     	click.echo('Magrib: ' + maghrib_time)
     if isha or all:
     	click.echo('Isha: ' + isha_time)
-    if current:
+    if current or (not fajr and not dhuhr and not asr and not maghrib and not isha and not all):
     	current_time=datetime.now().strftime("%H:%M")
     	if current_time < fajr_time:
     		click.echo('current: Fajr: ' + fajr_time)
