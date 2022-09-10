@@ -46,7 +46,7 @@ magrib=$(echo "$ezanJson" | jq '.data.timings.Maghrib')
 isha=$(echo "$ezanJson" | jq '.data.timings.Isha')
 
 echo "Fajr: ${fajr}"
-echo "Duhr: ${dhuhr}"
+echo "Dhuhr: ${dhuhr}"
 echo "Asr: ${asr}"
 echo "Magrib: ${magrib}"
 echo "Isha: ${isha}"
