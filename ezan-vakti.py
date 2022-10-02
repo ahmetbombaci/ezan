@@ -6,6 +6,7 @@ from datetime import datetime
 from os.path import exists
 import os.path
 import requests
+import logging
 
 @click.command()
 @click.option('--fajr', is_flag=True, help='display fajr pray time.')
@@ -18,6 +19,7 @@ import requests
 def ezan_vakti(fajr, dhuhr, asr, maghrib, isha, all, current):
     """Display pray times."""
 
+    logging.info("START")
     cache_file = os.path.expandvars('$HOME/ezan-cache/') + datetime.now().strftime("%y%m%d")
 
     if not exists(cache_file):
@@ -58,10 +60,11 @@ def ezan_vakti(fajr, dhuhr, asr, maghrib, isha, all, current):
     		click.echo('current: Dhuhr: ' + dhuhr_time)
     	elif current_time < asr_time:
     		click.echo('current: Asr: ' + asr_time)
-    	elif current_time < magrib_time:
-    		click.echo('current: Magrib: ' + magrib_time)
+    	elif current_time < maghrib_time:
+    		click.echo('current: Magrib: ' + maghrib_time)
     	else:
     		click.echo('current: Isha: ' + isha_time)
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
     ezan_vakti()
