@@ -1,12 +1,15 @@
 #!/bin/bash
 
-# shellcheck source=/dev/null
-source ~/github/ezan/default.config
+# Set EZAN_HOME to ~/ezan/ if not already set
+EZAN_HOME="${EZAN_HOME:-$HOME/ezan}"
 
-if [ -e  ~/ezan.config ];
+# shellcheck source=/dev/null
+source "${EZAN_HOME}/default.config"
+
+if [ -e  "${EZAN_HOME}/custom.config" ];
 then
 	# shellcheck source=/dev/null
-	source ~/ezan.config
+	source "${EZAN_HOME}/custom.config"
 fi
 
 debugging="false"
@@ -18,8 +21,8 @@ function debug() {
     fi
 }
 
-mkdir -p ~/ezan-cache/
-CACHE_FILE=~/ezan-cache/$(date +%y%m%d)
+mkdir -p "${EZAN_HOME}/cache/"
+CACHE_FILE="${EZAN_HOME}/cache/$(date +%y%m%d)"
 if [ -e "${CACHE_FILE}" ];
 then
   debug "Using cache file"
