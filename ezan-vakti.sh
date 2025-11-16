@@ -34,7 +34,15 @@ else
   debug "ezan end point: $url"
 
   ezanJson=$(curl --silent "$url")
-  echo "${ezanJson}" > "${CACHE_FILE}"
+
+  # Check if API call was successful before caching
+  status=$(echo "${ezanJson}" | jq -r '.status' 2>/dev/null)
+  if [ "$status" = "OK" ]; then
+    echo "${ezanJson}" > "${CACHE_FILE}"
+    debug "API response cached successfully"
+  else
+    debug "API call failed, not caching response"
+  fi
 fi
 
 #debug sample ezan json so do not call the api#
