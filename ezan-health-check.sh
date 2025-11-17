@@ -77,13 +77,40 @@ else
     ERRORS=$((ERRORS + 1))
 fi
 
+# Detect which Python will be used by ezan.sh
+echo -n "Detecting Python interpreter for cronjobs... "
+if [ -f "${EZAN_HOME}/.venv/bin/python3" ]; then
+    PYTHON_CMD="${EZAN_HOME}/.venv/bin/python3"
+    echo -e "${GREEN}OK${NC} (venv)"
+    echo "  Using: ${PYTHON_CMD}"
+elif [ -f "${EZAN_HOME}/venv/bin/python3" ]; then
+    PYTHON_CMD="${EZAN_HOME}/venv/bin/python3"
+    echo -e "${GREEN}OK${NC} (venv)"
+    echo "  Using: ${PYTHON_CMD}"
+elif [ -n "$VIRTUAL_ENV" ] && [ -f "$VIRTUAL_ENV/bin/python3" ]; then
+    PYTHON_CMD="$VIRTUAL_ENV/bin/python3"
+    echo -e "${YELLOW}WARNING${NC}"
+    echo "  Using active venv: ${PYTHON_CMD}"
+    echo "  Note: Cronjobs won't have VIRTUAL_ENV set. Consider installing to ${EZAN_HOME}/.venv"
+    WARNINGS=$((WARNINGS + 1))
+else
+    PYTHON_CMD="python3"
+    echo -e "${GREEN}OK${NC} (system)"
+    echo "  Using: system python3"
+fi
+
 # Check 4: Python dependencies
 echo -n "Checking Python dependencies... "
-if python3 -c "import click, requests, pychromecast" 2>/dev/null; then
+if ${PYTHON_CMD} -c "import click, requests, pychromecast" 2>/dev/null; then
     echo -e "${GREEN}OK${NC}"
 else
     echo -e "${YELLOW}WARNING${NC}"
-    echo "  Some Python packages may be missing. Run: pip install -r requirements.txt"
+    echo "  Some Python packages may be missing in ${PYTHON_CMD}"
+    if [ "$PYTHON_CMD" != "python3" ]; then
+        echo "  Install with: ${PYTHON_CMD} -m pip install -r ${EZAN_HOME}/requirements.txt"
+    else
+        echo "  Install with: pip3 install --user -r ${EZAN_HOME}/requirements.txt"
+    fi
     WARNINGS=$((WARNINGS + 1))
 fi
 

@@ -44,14 +44,31 @@ sudo apt install curl jq python3 python3-pip
 
 ### Python Dependencies
 
+**Option 1: Using Virtual Environment (Recommended)**
 ```bash
-pip3 install -r requirements.txt
+cd ~/ezan
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
-Or manually:
+The system will automatically detect and use the virtual environment when scheduling cronjobs.
+
+**Option 2: User Installation**
 ```bash
-pip3 install click requests pychromecast zeroconf
+pip3 install --user -r requirements.txt
 ```
+
+**Option 3: Manual Installation**
+```bash
+pip3 install --user click requests pychromecast zeroconf
+```
+
+**Note:** The ezan.sh script automatically detects Python installations in this order:
+1. `~/ezan/.venv/bin/python3` (virtual environment)
+2. `~/ezan/venv/bin/python3` (alternative venv location)
+3. `$VIRTUAL_ENV/bin/python3` (active virtual environment)
+4. System `python3`
 
 ### Setup
 

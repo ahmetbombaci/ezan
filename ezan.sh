@@ -32,6 +32,22 @@ function debug() {
     fi
 }
 
+# Detect Python interpreter to use
+# Priority: 1. EZAN_HOME/.venv, 2. EZAN_HOME/venv, 3. Current VIRTUAL_ENV, 4. System python3
+if [ -f "${EZAN_HOME}/.venv/bin/python3" ]; then
+    PYTHON_CMD="${EZAN_HOME}/.venv/bin/python3"
+    debug "Using venv python: ${PYTHON_CMD}"
+elif [ -f "${EZAN_HOME}/venv/bin/python3" ]; then
+    PYTHON_CMD="${EZAN_HOME}/venv/bin/python3"
+    debug "Using venv python: ${PYTHON_CMD}"
+elif [ -n "$VIRTUAL_ENV" ] && [ -f "$VIRTUAL_ENV/bin/python3" ]; then
+    PYTHON_CMD="$VIRTUAL_ENV/bin/python3"
+    debug "Using VIRTUAL_ENV python: ${PYTHON_CMD}"
+else
+    PYTHON_CMD="python3"
+    debug "Using system python3"
+fi
+
 # Extract hour & minute from "HH:MM"
 function convertPrayTime() {
     rawPrayTime=$1
@@ -85,7 +101,7 @@ function callEzan() {
     convertPrayTime "$1"
 
 	if [ "${action:?}" == "cast" ]; then
-			script_exec="python3 ${EZAN_HOME}/ezan.py --cast \"${cast_name:?}\" #ezanruncronjob"
+			script_exec="${PYTHON_CMD} ${EZAN_HOME}/ezan.py --cast \"${cast_name:?}\" #ezanruncronjob"
 	elif [ "${action:?}" == "command" ]; then
 			script_exec="${command_script:?} #ezanruncronjob" 
 	fi
