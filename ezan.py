@@ -53,17 +53,20 @@ if args.show_zeroconf_debug:
 chromecasts, browser = pychromecast.get_listed_chromecasts(
     friendly_names=[args.cast], known_hosts=args.known_host
 )
-if not chromecasts:
-    print(f'No chromecast with name "{args.cast}" discovered')
-    sys.exit(1)
 
-cast = chromecasts[0]
-# Start socket client's worker thread and wait for initial status update
-cast.wait()
+try:
+    if not chromecasts:
+        print(f'No chromecast with name "{args.cast}" discovered')
+        sys.exit(1)
 
-yt = YouTubeController()
-cast.register_handler(yt)
-yt.play_video(VIDEO_ID)
+    cast = chromecasts[0]
+    # Start socket client's worker thread and wait for initial status update
+    cast.wait()
 
-# Shut down discovery
-browser.stop_discovery()
+    yt = YouTubeController()
+    cast.register_handler(yt)
+    yt.play_video(args.videoid)
+finally:
+    # Shut down discovery
+    if browser:
+        browser.stop_discovery()

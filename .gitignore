@@ -30,6 +30,9 @@ cache/
 # Custom configuration (personal settings)
 custom.config
 
+# Log files
+*.log
+
 # Virtual environments
 venv/
 env/
