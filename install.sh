@@ -98,7 +98,14 @@ fi
 echo -e "${BLUE}[5/7] Installing Python dependencies...${NC}"
 if command -v pip3 &> /dev/null; then
     if [ -f "${EZAN_HOME}/requirements.txt" ]; then
-        pip3 install -r "${EZAN_HOME}/requirements.txt" --user --quiet
+        # Check if we're in a virtual environment
+        if [[ -n "$VIRTUAL_ENV" ]] || [[ -n "$CONDA_DEFAULT_ENV" ]]; then
+            # In a virtual environment, don't use --user
+            pip3 install -r "${EZAN_HOME}/requirements.txt" --quiet
+        else
+            # Not in a virtual environment, use --user
+            pip3 install -r "${EZAN_HOME}/requirements.txt" --user --quiet
+        fi
         echo -e "  ${GREEN}Python packages installed${NC}"
     else
         echo -e "  ${YELLOW}requirements.txt not found, skipping${NC}"
