@@ -76,8 +76,8 @@ if ! command -v python3 &> /dev/null; then
     MISSING_DEPS+=("python3")
 fi
 
-if ! command -v pip3 &> /dev/null; then
-    MISSING_DEPS+=("python3-pip")
+if ! python3 -c "import venv" &> /dev/null 2>&1; then
+    MISSING_DEPS+=("python3-venv")
 fi
 
 if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
@@ -96,22 +96,24 @@ fi
 
 # Install Python dependencies
 echo -e "${BLUE}[5/7] Installing Python dependencies...${NC}"
-if command -v pip3 &> /dev/null; then
+if command -v python3 &> /dev/null; then
     if [ -f "${EZAN_HOME}/requirements.txt" ]; then
-        # Check if we're in a virtual environment
-        if [[ -n "$VIRTUAL_ENV" ]] || [[ -n "$CONDA_DEFAULT_ENV" ]]; then
-            # In a virtual environment, don't use --user
-            pip3 install -r "${EZAN_HOME}/requirements.txt" --quiet
-        else
-            # Not in a virtual environment, use --user
-            pip3 install -r "${EZAN_HOME}/requirements.txt" --user --quiet
+        VENV_DIR="${EZAN_HOME}/venv"
+
+        # Create virtual environment if it doesn't exist
+        if [ ! -d "$VENV_DIR" ]; then
+            echo "  Creating virtual environment..."
+            python3 -m venv "$VENV_DIR"
         fi
-        echo -e "  ${GREEN}Python packages installed${NC}"
+
+        # Install packages into the venv
+        "$VENV_DIR/bin/pip" install -r "${EZAN_HOME}/requirements.txt" --quiet
+        echo -e "  ${GREEN}Python packages installed into venv${NC}"
     else
         echo -e "  ${YELLOW}requirements.txt not found, skipping${NC}"
     fi
 else
-    echo -e "  ${YELLOW}pip3 not found, skipping Python packages${NC}"
+    echo -e "  ${YELLOW}python3 not found, skipping Python packages${NC}"
 fi
 
 # Create custom.config
@@ -154,7 +156,9 @@ else
     if [ "$ACTION_CHOICE" = "1" ]; then
         echo ""
         echo "Available Chromecast devices:"
-        python3 "${EZAN_HOME}/device-list.py" 2>/dev/null || echo "  (Run device-list.py to see available devices)"
+        DEVICE_PYTHON="${EZAN_HOME}/venv/bin/python3"
+        [ ! -f "$DEVICE_PYTHON" ] && DEVICE_PYTHON="python3"
+        "$DEVICE_PYTHON" "${EZAN_HOME}/device-list.py" 2>/dev/null || echo "  (Run device-list.py to see available devices)"
         echo ""
         read -p "Enter Chromecast friendly name: " CAST_NAME
 
